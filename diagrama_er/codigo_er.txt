@@ -1,0 +1,98 @@
+@startuml
+' --- Configurações para uma aparência mais limpa ---
+skinparam linetype ortho
+hide empty members
+
+' --- Definição das Entidades (Tabelas) ---
+
+entity "PERFIS" as PERFIS {
+  * id : integer <<PK>>
+  --
+  * nome_perfil : varchar
+}
+
+entity "USUARIOS" as USUARIOS {
+  * id : integer <<PK>>
+  --
+  * nome : varchar
+  * email : varchar
+  * senha_hash : varchar
+  # perfil_id : integer <<FK>>
+}
+
+entity "FORNECEDORES" as FORNECEDORES {
+  * id : integer <<PK>>
+  --
+  * nome_empresa : varchar
+  * cnpj : varchar
+  * contato_email : varchar
+}
+
+entity "SERVICOS" as SERVICOS {
+  * id : integer <<PK>>
+  --
+  * nome_servico : varchar
+  * descricao : text
+  * tipo : varchar
+  # fornecedor_id : integer <<FK>>
+}
+
+entity "PACOTES" as PACOTES {
+  * id : integer <<PK>>
+  --
+  * nome_pacote : varchar
+  * descricao : text
+  * preco_base : decimal
+  * status : varchar
+  # atendente_criador_id : integer <<FK>>
+}
+
+' Tabela de ligação Muitos-para-Muitos
+entity "PACOTE_SERVICOS" as PACOTE_SERVICOS {
+    * pacote_id : integer <<FK>>
+    * servico_id : integer <<FK>>
+}
+
+
+entity "VENDAS" as VENDAS {
+  * id : integer <<PK>>
+  --
+  * data_venda : datetime
+  * valor_final : decimal
+  * status_pagamento : varchar
+  # cliente_id : integer <<FK>>
+  # atendente_id : integer <<FK>>
+}
+
+' Tabela de ligação Muitos-para-Muitos
+entity "VENDA_PACOTES" as VENDA_PACOTES {
+    * venda_id : integer <<FK>>
+    * pacote_id : integer <<FK>>
+    * quantidade: integer
+}
+
+
+' --- Definição dos Relacionamentos ---
+
+' Relacionamentos Um-para-Muitos diretos
+PERFIS ||--|{ USUARIOS : "possui"
+FORNECEDORES ||--|{ SERVICOS : "fornece"
+USUARIOS }o--|| PACOTES : "cria"
+
+' CORREÇÃO: Representando a relação Muitos-para-Muitos através da tabela de ligação
+' Um PACOTE pode estar em muitas linhas de PACOTE_SERVICOS.
+' Um SERVICO pode estar em muitas linhas de PACOTE_SERVICOS.
+PACOTES ||--|{ PACOTE_SERVICOS
+SERVICOS ||--|{ PACOTE_SERVICOS
+
+' CORREÇÃO: Representando a relação Muitos-para-Muitos entre Vendas e Pacotes
+' Uma VENDA pode conter vários pacotes (registrados em VENDA_PACOTES).
+' Um PACOTE pode estar em várias vendas (registradas em VENDA_PACOTES).
+VENDAS ||--|{ VENDA_PACOTES
+PACOTES ||--|{ VENDA_PACOTES
+
+
+' Relacionamentos da Venda com os Usuários
+USUARIOS }o--|| VENDAS : "realiza (cliente)"
+USUARIOS }o-up-|| VENDAS : "processa (atendente)"
+@enduml

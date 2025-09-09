@@ -1,0 +1,107 @@
+@startuml
+' --- Configurações para uma aparência mais agradável ---
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+skinparam usecase {
+    BackgroundColor #LightCyan
+    BorderColor #181818
+    ArrowColor #2E86C1
+}
+skinparam rectangle {
+    BorderColor #666
+    BackgroundColor #WhiteSmoke
+    stereotypeFontColor #333
+}
+skinparam arrow {
+    Color #2E86C1
+}
+
+' --- Direção do layout ---
+left to right direction
+
+' --- Definição dos Atores ---
+actor Cliente
+actor Atendente
+actor Gerente
+
+' --- Herança ---
+Gerente --|> Atendente
+
+' --- Agrupamento dos Casos de Uso em Pacotes ---
+
+package "Sistema da Agência" {
+
+    package "Interação do Cliente" {
+        usecase "Realizar Login" as UC_LOGIN
+        usecase "Pesquisar Pacotes" as UC_PESQ
+        usecase "Filtrar Pacotes" as UC_FILTRAR
+        usecase "Solicitar Reserva" as UC_RESERVA
+        usecase "Verificar Disponibilidade" as UC_DISP
+        usecase "Aceitar Termos do Pacote" as UC_TERMOS
+        usecase "Efetuar Pagamento" as UC_PAG
+        usecase "Pagamento via Cartão" as UC_CARTAO
+        usecase "Pagamento via Pix" as UC_PIX
+        usecase "Pagamento via Boleto" as UC_BOLETO
+    }
+
+    package "Gestão e Vendas (Atendente)" {
+        package "Gestão de Cadastros" {
+            usecase "CRUD Cliente" as UC_CRUD_CLI
+            usecase "CRUD Serviço" as UC_CRUD_SERV
+        }
+
+        package "Gestão de Pacotes e Vendas" {
+            usecase "Consultar Disponibilidade de Serviço" as UC_CONS_DISP
+            usecase "Montar Pacote" as UC_MONT_PAC
+            usecase "Atualizar Pacote" as UC_ATU_PAC
+            usecase "Excluir Pacote" as UC_EXC_PAC
+            usecase "Buscar Pacote com Filtros" as UC_BUS_PAC
+            usecase "Fechar Pacote" as UC_FECH_PAC
+            usecase "Emitir Venda" as UC_VENDA
+            usecase "Gerar Recibo" as UC_RECIBO
+        }
+    }
+
+    package "Funções Gerenciais" {
+        usecase "CRUD Fornecedor" as UC_CRUD_FOR
+        usecase "Gerenciar Usuários" as UC_GER_USER
+        usecase "Visualizar Dashboards" as UC_DASH
+        usecase "Definir Margem de Lucro" as UC_MARGEM
+        usecase "Aprovar Pacotes" as UC_APROV
+        usecase "Visualizar Vendas do Atendente" as UC_VENDAS_ATEND
+        usecase "Aprovar Desconto" as UC_APROV_DESC
+    }
+}
+
+' --- Conexões dos Atores aos Pacotes e Casos de Uso ---
+Cliente --> UC_LOGIN
+Cliente --> UC_PESQ
+Cliente --> UC_RESERVA
+Cliente --> UC_TERMOS
+Cliente --> UC_PAG
+
+' O Atendente também faz login e acessa seus pacotes de gestão
+Atendente --> UC_LOGIN
+Atendente --> (Gestão de Cadastros)
+Atendente --> (Gestão de Pacotes e Vendas)
+
+' O Gerente acessa seu pacote de funções (e herda todo o resto do Atendente)
+Gerente --> (Funções Gerenciais)
+
+
+' --- Relações entre Casos de Uso ---
+UC_FILTRAR .> UC_PESQ : <<extend>>
+UC_RESERVA ..> UC_DISP : <<include>>
+UC_VENDA ..> UC_RECIBO : <<include>>
+
+' A aprovação de desconto estende o processo de fechar um pacote,
+' sendo uma etapa condicional executada pelo Gerente.
+UC_APROV_DESC .> UC_FECH_PAC : <<extend>>
+
+' A relação de dependência entre Serviço e Fornecedor é melhor
+UC_CRUD_FOR ..> UC_CRUD_SERV : <<include>>
+
+UC_PAG <|-- UC_CARTAO
+UC_PAG <|-- UC_PIX
+UC_PAG <|-- UC_BOLETO
+@enduml

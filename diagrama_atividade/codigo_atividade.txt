@@ -1,0 +1,64 @@
+@startuml
+title Diagrama de Atividade - Processo de Compra de Pacote
+
+|Cliente|
+start
+:Acessar área de pacotes;
+:Selecionar pacote desejado;
+:Solicitar compra do pacote;
+
+|Atendente|
+:Receber e processar pedido do cliente;
+
+|Sistema|
+:Verificar disponibilidade dos serviços;
+fork
+    :Verificar disponibilidade da Hospedagem;
+fork again
+    :Verificar disponibilidade da Passagem;
+fork again
+    :Verificar disponibilidade do Tour;
+end fork
+
+if (Todos os serviços estão disponíveis?) then (sim)
+    :Efetuar pré-reserva dos serviços;
+    if (Desconto necessita aprovação?) then (sim)
+        |Gerente|
+        :Analisar pedido de desconto;
+        if (Aprovar desconto?) then (sim)
+            |Sistema|
+            :Aplicar desconto no valor total;
+        else (não)
+            |Atendente|
+            :Informar negação do desconto;
+            stop
+        endif
+    endif
+    |Sistema|
+    :Calcular valor final do pacote;
+    |Atendente|
+    :Informar valor final ao cliente;
+    |Cliente|
+    :Efetuar Pagamento;
+    |Sistema|
+    :Processar pagamento;
+    if (Pagamento aprovado?) then (sim)
+        :Confirmar reserva dos serviços;
+        :Dar baixa na disponibilidade;
+        :Emitir Recibo/Nota Fiscal;
+        :Enviar confirmação para o cliente;
+        |Cliente|
+        :Receber confirmação da compra;
+        stop
+    else (não)
+        :Cancelar pré-reservas;
+        |Atendente|
+        :Informar falha no pagamento;
+        stop
+    endif
+else (não)
+    |Atendente|
+    :Informar indisponibilidade de serviço ao cliente;
+    stop
+endif
+@enduml
