@@ -8,9 +8,9 @@
 ## Critérios de Aceitação
 
 - Um formulário de criação de usuário deve conter os campos:
-- 
+  
 - Nome Completo, E-mail, Senha Provisória e **Perfil** ("**Gerente**", "**Atendente**" ou "**Cliente**").
-- 
+  
 - Se o perfil selecionado for "Cliente", os campos **CPF/CNPJ** e **Telefone** devem se tornar obrigatórios. Para outros perfis, estes campos não devem ser solicitados. 
 
 - O sistema deve validar que o E-mail e o CPF/CNPJ (quando preenchido) são únicos na base de dados.  
