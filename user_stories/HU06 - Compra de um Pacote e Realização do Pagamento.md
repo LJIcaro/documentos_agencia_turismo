@@ -1,3 +1,4 @@
+# HU06 - Compra de um Pacote e Realização do Pagamento
 
 **Como um** Cliente:
 
