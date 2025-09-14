@@ -1,7 +1,5 @@
 # 📑 Modelo Entidade-Relacionamento (DER) — Sistema de Agência de Turismo
 
-Este documento descreve a estrutura de dados completa, refletindo o script SQL fornecido.
-
 ---
 
 ## 🔎 Visão Geral das Áreas do Modelo
