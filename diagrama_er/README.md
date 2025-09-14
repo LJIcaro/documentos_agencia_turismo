@@ -159,3 +159,7 @@ Este documento descreve a estrutura de dados completa, refletindo o script SQL f
 - Um **USUARIO** (Atendente) → pode atender muitas **VENDAS** e **CHAMADO**.  
 - Uma **VENDA** → gera uma única **NOTA_FISCAL** e e tem um **PAGAMENTO**.  
 - Um **CHAMADO** → contém várias **MENSAGENS**.  
+
+---
+
+#### [Clique aqui para acessar o DER do sistema](https://drawsql.app/teams/fesf-1/diagrams/agencia-turismo)
