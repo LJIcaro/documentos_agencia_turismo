@@ -189,6 +189,6 @@ Este projeto está disponível sob a licença MIT. Consulte o arquivo LICENSE pa
 
 ## Contato
 
-Para dúvidas ou sugestões sobre a documentação, abra uma issue no repositório ou entre em contato com o AUTOR - VINICIUS DOS SANTOS REIS
+Para dúvidas ou sugestões sobre a documentação, abra uma issue no repositório ou entre em contato com o AUTORES - VINICIUS DOS SANTOS REIS E LUCAS DE OLIVEIRA RANGEL
 
 ---
