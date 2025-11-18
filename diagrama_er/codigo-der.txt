@@ -1,0 +1,117 @@
+@startuml AgenciaTurismoComplexo
+
+skinparam style strictuml
+hide methods
+hide members
+left to right direction
+
+' =========================================================================
+' 1. ENTIDADES PRIMÁRIAS E DE TRANSAÇÃO
+' =========================================================================
+entity CLIENTE {
+  <U>ID_Cliente</U>
+  --
+  Nome
+  CPF
+  Email
+}
+
+entity PACOTE {
+  <U>ID_Pacote</U>
+  --
+  Nome
+  Preco_Base
+  Categoria
+}
+
+entity DESTINO {
+  <U>ID_Destino</U>
+  --
+  Nome
+  Pais
+}
+
+entity RESERVA {
+  <U>ID_Reserva</U>
+  --
+  Data_Reserva
+  Status
+  Valor_Final
+}
+
+entity PAGAMENTO {
+  <U>ID_Pagamento</U>
+  --
+  Tipo
+  Valor_Pago
+  Data_Pagamento
+}
+
+' =========================================================================
+' 2. ENTIDADES DE RECURSOS E FUNCIONAIS
+' =========================================================================
+entity SERVICO {
+  <U>ID_Servico</U>
+  --
+  Nome
+  Descricao
+  Preco
+}
+
+' ENTIDADES DE ESPECIALIZAÇÃO (Subtipos de SERVICO)
+entity VOO {
+  <U>ID_Voo</U>
+  --
+  Numero_Voo
+  Companhia
+  Assento
+  Custo
+}
+
+entity HOTEL {
+  <U>ID_Hotel</U>
+  --
+  Nome
+  Endereco
+  Categoria
+  Custo_Diaria
+}
+
+' ENTIDADES FUNCIONAIS
+entity FUNCIONARIO {
+  <U>ID_Funcionario</U>
+  --
+  Nome
+  Data_Admissao
+  Comissao
+}
+
+entity GERENTE {
+  <U>ID_Gerente</U>
+  --
+  Nome
+  Area_Responsavel
+}
+
+' =========================================================================
+' 3. RELACIONAMENTOS (Losangos Lógicos e Especialização)
+' =========================================================================
+
+' RELAÇÕES DE HIERARQUIA E VENDA
+GERENTE "1" -- "N" FUNCIONARIO : gerencia
+CLIENTE "1" -- "N" RESERVA : efetua
+FUNCIONARIO "1" -- "N" RESERVA : assessora
+
+' RELAÇÕES DE TRANSAÇÃO
+RESERVA "1" -- "N" PAGAMENTO : possui
+RESERVA "N" -- "M"  PACOTE: contem
+
+' RELAÇÕES DE COMPOSIÇÃO DE PACOTES
+PACOTE "1" -- "N" DESTINO : inclui
+PACOTE "N" -- "M" SERVICO : compõe
+
+' RELAÇÕES DE ESPECIALIZAÇÃO/HERANÇA (VOO e HOTEL são tipos de SERVICO)
+SERVICO <|-- VOO : é um
+SERVICO <|-- HOTEL : é um
+
+@enduml

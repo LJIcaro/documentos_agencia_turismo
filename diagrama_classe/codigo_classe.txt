@@ -1,0 +1,84 @@
+@startuml
+title Diagrama de Classe
+
+abstract class Usuario {
+  # id_usuario : int
+  # nome : String
+  # email : String
+  # senha : String
+  + login(email, senha)
+  + logout()
+}
+
+class Cliente {
+  - cpf : String
+  - telefone : String
+  + pesquisarPacotes(destino, data)
+  + fazerReserva(pacote, data)
+  + realizarPagamento(reserva, metodo)
+  + deixarAvaliacao(pacote, nota, comentario)
+}
+
+class AgenteDeViagens {
+  - matricula : String
+  + criarPacote(dados)
+  + editarPacote(pacote, dados)
+  + visualizarHistorico(cliente)
+}
+
+class Administrador {
+  + gerenciarContas(agente, acao)
+  + gerarRelatorioVendas(periodo)
+}
+
+class Pacote {
+  - id_pacote : int
+  - nome : String
+  - descricao : String
+  - preco : double
+  - data_inicio : Date
+  - data_fim : Date
+  - disponivel : boolean
+  + verificarDisponibilidade() : boolean
+  + calcularPrecoTotal(numPessoas) : double
+}
+
+class Destino {
+  - id_destino : int
+  - nome : String
+  - pais : String
+}
+
+class Reserva {
+  - id_reserva : int
+  - data_reserva : Date
+  - status : String
+  - num_passageiros : int
+  + confirmarReserva()
+  + cancelarReserva()
+}
+
+class Pagamento {
+  - id_pagamento : int
+  - valor : double
+  - data_pagamento : Date
+  - metodo : String
+  - status : String
+  + processarPagamento() : boolean
+}
+
+' Herança
+Usuario <|-- Cliente
+Usuario <|-- AgenteDeViagens
+Usuario <|-- Administrador
+
+' Associações
+Cliente "1" -- "N" Reserva : faz
+Pacote "1" -- "N" Reserva : contem
+Reserva "1" -- "1" Pagamento : possui
+AgenteDeViagens "1" -- "N" Reserva : gerencia
+
+' Associação N:M (Pacote - Destino)
+Pacote "N" -- "M" Destino : inclui
+
+@enduml
